@@ -4,20 +4,15 @@ const express=require('express');
 //puis a créé cet objet body pour vous et l'a rempli avec vos données de formulaire.
 //midellware:body.parser thawel el data khater djina fi chakel texte
 const body=express.urlencoded({extended:true})
-
 const router=express.Router();
 const {LoginUser,GETRegisterPage,POSTRegisterUser,GetLoginPage,logout}=require('../controllers/AuthController')
 const {notAuth}=require('./guardAuth')
 
 //pour afficher la page register
 router.get('/register',notAuth,GETRegisterPage);
-
 router.post('/register',body,POSTRegisterUser);
-
-
+//not auth bech nkolou raw ena cbon auth aleh mechi nawed namel auth
 router.get('/login',notAuth,GetLoginPage);
 router.post('/login',body,LoginUser);
-
-
-router.post('/logout',logout)
+router.post('/logout',logout);
 module.exports=router;

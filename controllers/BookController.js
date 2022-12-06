@@ -3,14 +3,10 @@ const Book=require('../models/book')
 var session = require('express-session');
 var MongoDBStore = require('connect-mongodb-session')(session);
 
-
-
 //allbooks
 const GetBooks= async (req, res) => {
     try {
-      
       const books = await Book.find();
-      
       if (books.length == 0) {
         res.status(401).json({ msg: "your database is empty" });
       } else {
@@ -22,25 +18,7 @@ const GetBooks= async (req, res) => {
       res.status(400).json({ msg: "somthing is wrong" });
     }
   };
-//home 3 books
-const get3books=async (req, res) => {
-    try {
-      
-      const books = await Book.find({}).limit(3);
-      
-      if (books.length == 0) {
-        res.status(401).json({ msg: "your database is empty" });
-      } else {
-        //sinon on les affiches sous format json
-        // res.status.json({books:books})
-        res.render('index',{
-          books:books,
-          verifUser:req.session.userId})
-      }
-    } catch (error) {
-      res.status(400).json({ msg: "somthing is wrong" });
-    }
-  };
+
 //details
 const getBookByID=async(req,res)=>{
   const id=req.params.id;
@@ -115,7 +93,7 @@ const addBooks=async(req,res)=>{
         }
     
   } catch (error) {
-    console.log(error)
+   
     req.flash('Errormsg','saving failed')
     res.redirect('/addbook')
      // res.status(403).json({msg:'saving failed'})
@@ -139,6 +117,7 @@ const getupdate=async(req,res)=>{
         res.status(400).json({msg:'update is failed'})
     }
 }
+
 //books de user enregistrer dans cette session
 const getMybooks=async(req,res)=>{
   try {
@@ -157,4 +136,4 @@ const getMybooks=async(req,res)=>{
   }
 
 }
-module.exports={getupdate,getMybooks,GetBooks,getaddbook,addBooks,deleteBook,getBookByID,updateBook,get3books}
+module.exports={getupdate,getMybooks,GetBooks,getaddbook,addBooks,deleteBook,getBookByID,updateBook}

@@ -14,8 +14,11 @@ const GETRegisterPage=async(req,res,next)=>{
 }
 const GetLoginPage=async(req,res)=>{
     res.render('login',
+    //req.flash array neregistriw fih barcha erreur 
+    //howa controlleur d'erreur yji yawed yektebli eli mawjoud al console log
     {verifUser:req.session.userId,msg:req.flash('error')[0]})
 }
+
 const POSTRegisterUser=async(req,res,next)=>{
     const user=req.body
     try {
@@ -48,7 +51,7 @@ const POSTRegisterUser=async(req,res,next)=>{
     } catch (error) {
        req.flash('error',error)
        res.redirect('/register');
-   // res.status(400).json({msg:"server error"})
+   //res.status(400).json({msg:"server error"})
     console.log(error)
     }
 }

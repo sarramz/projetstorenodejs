@@ -2,19 +2,21 @@ const express=require('express');
 const router=express.Router();
 // multer lel data image 
 const multer=require('multer')//midelware
-const {GetBooks,get3books,addBooks,deleteBook,getBookByID,updateBook,getaddbook}=require('../controllers/BookController')
+const {GetBooks,addBooks,deleteBook,getBookByID,updateBook,getaddbook}=require('../controllers/BookController')
 
 
 const {isAuth}=require('./guardAuth')
 
-router.get("/",get3books);
+
+//la page matethal ken mayebda authentifiee etheka aleh hatina isAuth
 router.get("/books",isAuth,GetBooks);
 router.get("/books/:id",isAuth,getBookByID);
 
-
 router.get("/addbook",isAuth,getaddbook)
 router.post("/addbook",multer({
+
     storage : multer.diskStorage({
+      //destination lel photo win theb thotha   
         destination: function (req, file, cb) {
           cb(null, 'assets/uploads')
         },
@@ -23,6 +25,7 @@ router.post("/addbook",multer({
     }
         })
         }).single('image')
+        //single car je vais prendre une seul image
 ,isAuth,addBooks);
 
 

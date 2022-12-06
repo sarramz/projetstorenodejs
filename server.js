@@ -1,10 +1,13 @@
 const express=require('express')
 const path=require('path')
 const mongoose=require('mongoose')
+//middleware flash controller
 const flash=require('connect-flash')
 
 const app=express();
+
 app.use(flash());
+//bech nokoedch neteb /assets
 app.use(express.static(path.join(__dirname,'assets')))
 require("dotenv").config({ path: "./config/.env" });
 const port = process.env.PORT || 3000;
@@ -19,11 +22,11 @@ var Store = new MongoDBStore({
   collection: 'mySessions'
 });
 app.use(session({
-  
+  //le secret qui aprtir de  lui il va crypter lid
   secret: 'This is a secret key',
-
+// token kadeh lezmou y3ich defaut lwehid mteou tsaker el browser yamel logout yfasekh el cookies
   // cookie: {
-  //   //duree de vie de token
+  //   //duree de vie de token bel millisecond
   //   maxAge: 1000 * 60 * 60 * 24 * 7 // 1 week
   // },
   store: Store,
@@ -48,19 +51,25 @@ app.use('/',bookRoute)
 
 const authRoute=require('./routes/AuthRoute')
 app.use('/',authRoute)
+
+const homeRoute=require('./routes/HomeRoute')
+app.use('/',homeRoute)
+
+const aboutHome=require('./routes/AboutRoute')
+app.use('/',aboutHome)
+
+const contactHome=require('./routes/ContactRoute')
+app._router.get('/contact',contactHome)
+
 connectDb();
-
-
 app.set('view engine','ejs')
 app.set('views','views');
-
 app.get('/contact',(req,res,next)=>{
   res.render('contact',{verifUser:req.session.userId})
 })
 app.get('/about',(req,res,next)=>{
   res.render('about',{verifUser:req.session.userId})
 })
-
 app.get('/dashboard',(req,res,next)=>{
   res.render('dashboard',{verifUser:req.session.userId})
 })
