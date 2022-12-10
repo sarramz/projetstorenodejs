@@ -1,5 +1,5 @@
 const route=require('express').Router()
-const contactController=require('../controllers/contact.controller')
+const contactController=require('../controllers/contactController')
 
 route.get('/contact',contactController)
 

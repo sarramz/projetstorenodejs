@@ -59,7 +59,15 @@ const aboutHome=require('./routes/AboutRoute')
 app.use('/',aboutHome)
 
 const contactHome=require('./routes/ContactRoute')
-app._router.get('/contact',contactHome)
+app.use('/contact',contactHome)
+
+
+app.get('/dashboard',(req,res,next)=>{
+  res.render('dashboard')
+})
+app.get('/tables',(req,res,next)=>{
+  res.render('tables')
+})
 
 connectDb();
 app.set('view engine','ejs')
@@ -67,9 +75,7 @@ app.set('views','views');
 app.get('/contact',(req,res,next)=>{
   res.render('contact',{verifUser:req.session.userId})
 })
-app.get('/about',(req,res,next)=>{
-  res.render('about',{verifUser:req.session.userId})
-})
+
 app.get('/dashboard',(req,res,next)=>{
   res.render('dashboard',{verifUser:req.session.userId})
 })

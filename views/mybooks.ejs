@@ -28,10 +28,20 @@
             <td><%= book.title %></td>
             <td><%= book.author %></td>
             <td>$<%= book.price %></td>
-            <td><a href="/mybooks/delete/<%=book._id%>" class="btn btn-danger">Delete</a>
+            <td>
+              <a href="/delete/<%=book._id%>" class="btn btn-danger">Delete</a>
             
-              <a href="/mybooks/update/<%=book._id%>" class="btn btn-primary">Update</a></td>
-        </tr>
+              <a href="/update/<%=book._id%>" class="btn btn-primary">Update</a>
+            </td>
+
+
+              <!-- <td>
+                   <form action="/delete" method="POST">
+                    <input type="hidden" name="bookId" value="<%=book._id%>">
+                    <button  class="btn btn-danger" type="submit"> Delete</button>
+                   </form>
+              </td> -->
+           </tr>
           <% } %>
         </tbody>
       </table>

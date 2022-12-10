@@ -34,12 +34,13 @@ const getBookByID=async(req,res)=>{
 
 //delete     
 const deleteBook=async(req,res)=>
- {const id=req.params.id;
+ {
+  const id=req.params.id;
 try {
     await Book.deleteOne({_id:id});
    // const Books= await Book.find();
     console.log('user is sucessfully deleted')
-    res.redirect('/mybooks')
+    res.redirect('/')
     //res.status(200).json({msg:'user is sucessfully deleted',users})
 } catch (error) {
   console.log('delete is failed')
@@ -47,6 +48,8 @@ try {
     res.redirect('/mybooks')
 }
 };
+
+
 //getadd
 const getaddbook=async(req,res,next)=>{
   res.render('addbook',{verifUser:req.session.userId,Successmsg:req.flash('Successmsg')[0],
@@ -101,22 +104,73 @@ const addBooks=async(req,res)=>{
  
   
 }
-const getupdate=async(req,res)=>{
-  res.render('updateBook',{bookUpdate:book,verifUser:req.session.userId})
+
+//get page book for update
+const getMybookForupdate=async(req,res)=>{
+   const id = req.params.id;
+   try {
+      const  bookupdate = await Book.findById(id)
+      // console.log(bookUpdate)
+      res.render('updateBook',{bookUpdate:bookupdate,verifUser:req.session.userId,Successmsg:req.flash('Successmsg')[0],
+      Errormsg:req.flash('Errormsg')[0]})
+   } catch (error) {
+    res.status(400).json({msg:'update is failed'})
+   }
+       
 }
 
-  //update  
-  const updateBook=async(req,res)=>{
-    
-    const id=req.params.id
-    const book=req.body;
-    try {
-        await Book.findByIdAndDelete(id,book);
-        res.status(200).json({msg:"user is sucessfully updated"})
-    } catch (error) {
-        res.status(400).json({msg:'update is failed'})
+const updateBook= async (req, res) => {
+      
+  const book=req.body;
+  console.log(book)
+  try {
+    //ken ena hatyt taswira 
+    if (req.file) {
+      
+      await Book.updateOne({_id:book.bookId},
+        {
+          title :book.title,
+          description:book.description,
+          price:book.price,
+          author:book.author,
+          image:req.file.filename,
+          userId:req.session.userId
+        }
+        );
+        console.log({msg:'book is sucessfully updated'})
+        req.flash('Successmsg','book is sucessfully updated')
+        res.redirect(`/update/${req.body.bookId}`)
+
+
+    }else{
+
+        await Book.updateOne({_id:book.bookId},
+          {
+            title :book.title,
+            description:book.description,
+            price:book.price,
+            author:book.author,
+            image:book.oldImage,
+            userId:req.session.userId
+          }
+          );
+          console.log({msg:'book is sucessfully updated'})
+          req.flash('Successmsg','book is sucessfully updated')
+          res.redirect(`/update/${req.body.bookId}`)
     }
-}
+        
+
+  } catch (error) {
+   
+    req.flash('Errormsg','saving failed')
+    res.redirect(`/update/${req.body.bookId}`)
+     // res.status(403).json({msg:'saving failed'})
+  }
+ 
+  
+
+};
+
 
 //books de user enregistrer dans cette session
 const getMybooks=async(req,res)=>{
@@ -136,4 +190,4 @@ const getMybooks=async(req,res)=>{
   }
 
 }
-module.exports={getupdate,getMybooks,GetBooks,getaddbook,addBooks,deleteBook,getBookByID,updateBook}
+module.exports={getMybookForupdate,getMybooks,GetBooks,getaddbook,addBooks,deleteBook,getBookByID,updateBook}
